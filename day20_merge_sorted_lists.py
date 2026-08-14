@@ -21,3 +21,4 @@ def merge_lists(list1 , list2):
 print(merge_lists([1, 2, 4], [1, 3, 4]))  # Expected: [1, 1, 2, 3, 4, 4]
 print(merge_lists([], [0]))               # Expected: [0]
 print(merge_lists([1, 5], [2, 3, 6]))     # Expected: [1, 2, 3, 5, 6]
+print(merge_lists([10, 20], [1, 2, 3]))
