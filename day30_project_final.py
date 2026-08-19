@@ -2,7 +2,7 @@
 # PROJECT: Data Auditor (Combines Days 1-29)
 # ==========================================
 
-def clean_and_short(nums):
+def clean_and_sort(nums):
     seen = {}
     cleaned = []
     for num in nums:
@@ -10,8 +10,8 @@ def clean_and_short(nums):
             seen[num] = True
             cleaned.append(num)
 
-    for i in range(len(nums)):
-        for j in range(i +1, len(nums)):
+    for i in range(len(cleaned)):
+        for j in range(i +1, len(cleaned)):
             if cleaned[i]>cleaned[j]:
                 temp = cleaned[i]
                 cleaned[i] = cleaned[j]
@@ -32,22 +32,44 @@ def find_single_duplicates(nums):
 
 def summary_range(nums):
     if not nums:
-        return[]
+        return []
     result = []
     start = nums[0]
-    for i in range(len(nums)):
-        if nums[i] != nums[i -1] +1:
-            if start == nums[i -1]:
-                 result.append(str(start))
+
+    for i in range(1, len(nums)):
+        if nums[i] != nums[i - 1] + 1:
+            if start == nums[i - 1]:
+                result.append(str(start))
             else:
-                result.append(str(start) + "->" + str(nums[i -1]))
+                result.append(str(start) + "->" + str(nums[i - 1]))
             start = nums[i]
 
-        if start == nums[-1]:
-            result.append(str(start))
+
+    if start == nums[-1]:
+        result.append(str(start))
+    else:
+        result.append(str(start) + "->" + str(nums[-1]))
+
+    return result
+def missing_range(nums, lower, upper):
+    result = []
+    prev = lower - 1
+
+    for num in nums:
+        if num - prev > 1:
+            if prev + 1 == num - 1:
+                result.append(str(prev + 1))
+            else:
+                result.append(str(prev + 1) + "->" + str(num - 1))
+        prev = num
+
+
+    if upper - prev > 0:
+        if prev + 1 == upper:
+            result.append(str(prev + 1))
         else:
-            result.append(str(start) + "->" + str(nums[-1]))
-        return result
+            result.append(str(prev + 1) + "->" + str(upper))
+    return result
 
 def is_valid_data(s):
     stack = []
@@ -61,7 +83,7 @@ def is_valid_data(s):
             stack.pop()
         else:
             stack.append(char)
-    return len(stack) == 0 
+    return len(stack) == 0
 
 def two_sum(nums, target):
     left = 0
@@ -103,7 +125,7 @@ cleaned = clean_and_sort(raw_data)
 print("1. Cleaned & Sorted:", cleaned)
 
 # 2. Find the unique duplicate using XOR
-unique = find_single_duplicate(raw_data)
+unique = find_single_duplicates(raw_data)
 print("2. Number appearing once (XOR):", unique)
 
 # 3. Shift all numbers by +1
@@ -111,10 +133,10 @@ shifted = shift_by_one(cleaned)
 print("3. Shifted by +1:", shifted)
 
 # 4. Group consecutive numbers
-print("4. Summary Ranges:", summary_ranges(cleaned))
+print("4. Summary Ranges:", summary_range(cleaned))
 
 # 5. Find missing numbers
-print("5. Missing Ranges:", missing_ranges(cleaned, lower, upper))
+print("5. Missing Ranges:", missing_range(cleaned, lower, upper))
 
 # 6. Validate the string brackets
 print("6. Data string is valid?", is_valid_data(data_string))
